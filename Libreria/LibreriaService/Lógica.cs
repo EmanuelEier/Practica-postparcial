@@ -4,6 +4,7 @@
     {
         public List<Articulo> Articulos {  get; set; }
         public List<Venta> Ventas { get; set; }
+        public List<ArticuloVendido> articulosVendidos {  get; set; }
 
         public Lógica()
         {
@@ -11,23 +12,22 @@
             Ventas = new List<Venta>();
         }
 
-        public void registrarProductosCompra(int cantidad, string códigoArtículo)
-        {
+        
 
-        }
-
-        public void agregarVenta(int DNI, int descuento, List<ArticuloVendido> articulosVendidos)
+        public List<Venta> agregarVenta(int DNI, int descuento, List<ArticuloVendido> articulosVendidos)
         {
-            int indice = Articulos.FindIndex(x => x.Código == articulosVendidos.CódigoProducto);
 
             Venta venta = new Venta()
             {
                 DNICliente = DNI,
                 Descuento = descuento,
-                ArticulosVendidos = (List<Articulo>)articulosVendidos.Select(x => x.Código != null),
+                ArticulosVendidos = articulosVendidos,
                 ImporteTotal = calcularImporteTotal(Articulos),
                 Fecha = DateTime.Now,
             };
+
+            Ventas.Add(venta);
+            return Ventas;
         }
 
         public double calcularImporteTotal(List<Articulo> articulosVendidos)

@@ -10,7 +10,7 @@ namespace LibreriaService
     {
         public int DNICliente { get; set; }
         public int Descuento { get; set; }
-        public List<Articulo> ArticulosVendidos { get; set; }
+        public List<ArticuloVendido> ArticulosVendidos { get; set; }
         public double ImporteTotal { get; set; }
         public DateTime Fecha { get; set; }
 
