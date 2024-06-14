@@ -1,10 +1,12 @@
-﻿namespace LibreriaService
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace LibreriaService
 {
     public class Lógica
     {
-        public List<Articulo> Articulos {  get; set; }
+        public List<Articulo> Articulos { get; set; }
         public List<Venta> Ventas { get; set; }
-        public List<ArticuloVendido> articulosVendidos {  get; set; }
+        public List<ArticuloVendido> articulosVendidos { get; set; }
 
         public Lógica()
         {
@@ -12,10 +14,15 @@
             Ventas = new List<Venta>();
         }
 
-        
+
 
         public List<Venta> agregarVenta(int DNI, int descuento, List<ArticuloVendido> articulosVendidos)
         {
+            var listaCorroborando = articulosVendidos.Select(x => x.CódigoProducto).ToList();
+            foreach (Articulo art in listaCorroborando)
+            {
+                if (art.Código == ) { }
+            }
 
             Venta venta = new Venta()
             {
@@ -42,7 +49,7 @@
         }
 
         public string obtenerDetalles(string códigoArticulo)
-        {   string result = string.Empty;
+        { string result = string.Empty;
             int indice = Articulos.FindIndex(x => x.Código == códigoArticulo);
 
             if (Articulos[indice] is Cuaderno cuaderno)
@@ -56,19 +63,23 @@
                 result = "regla";
             }
 
-            return  "- Tipo de producto:" + result
+            return "- Tipo de producto:" + result
                   + "- Nombre:" + Articulos[indice].Nombre
                   + "- Marca: " + Articulos[indice].Marca
                   + "- Precio venta: " + Articulos[indice].PrecioVenta
-                  + "- Stock disponible: " + Articulos[indice].CantStock;            
+                  + "- Stock disponible: " + Articulos[indice].CantStock;
         }
-
-        public void actualizaciónStockDisponible(string códigoArtículo, int cantidadParaAgregar)
+    
+        public List<Articulo> actualizaciónStockDisponible(string códigoArtículo, int cantidadParaAgregar)
         {
             int indice = Articulos.FindIndex(x => x.Código == códigoArtículo);
-            Articulos[indice].CantStock += cantidadParaAgregar; 
-        }
+            Articulos[indice].CantStock += cantidadParaAgregar;
 
+        return Articulos;
+    }
+
+        
+        
 
     }
 

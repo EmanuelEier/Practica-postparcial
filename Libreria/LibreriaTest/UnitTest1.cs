@@ -5,16 +5,16 @@ namespace LibreriaTest
 {
     public class Tests
     {
-        Lógica lógica {  get; set; }
+        Lógica lógica = new Lógica();
 
         [SetUp]
         public void Setup()
         {
-            Lógica lógica = new Lógica();
+            lógica = new Lógica();
         }
 
         [Test]
-        public void Test1()
+        public void generarNuevaVenta_Ok()
         {
             //ARRENGE
       
@@ -54,11 +54,31 @@ namespace LibreriaTest
 
 
             //ACT
-            List<Venta> listadoVentas = lógica.agregarVenta(45343929, 10, articulosVendidos);
+            var ventasRealizadas = lógica.agregarVenta(45343929, 10, articulosVendidos);
 
 
             //ASSERT
-            Assert.That(listadoVentas.Count, Is.EqualTo(1));
+            Assert.That(ventasRealizadas.Count, Is.EqualTo(1));
         }
+
+        [Test]
+        public void actualizarStock()
+        {
+            //ARRENGE
+            List<Articulo> misArticulos = new List<Articulo>();
+            misArticulos.Add(new Lapicera() { Código = "aaa1", Marca = "Bic", Nombre = "Lapicera", CantStock = 5, PrecioVenta = 300, Colores = (EnumColor)2, TipoTrazo = (EnumTrazo)2 });
+            misArticulos.Add(new Lapicera() { Código = "bbb2", Marca = "Bic", Nombre = "Lapicera", CantStock = 3, PrecioVenta = 700, Colores = (EnumColor)2, TipoTrazo = (EnumTrazo)2 });
+            misArticulos.Add(new Regla() { Código = "ccc3", Marca = "Pamco", Nombre = "Regla", CantStock = 2, PrecioVenta = 500, TamañoCm = 30 });
+            misArticulos.Add(new Cuaderno() { Código = "ddd4", Marca = "1810", Nombre = "Cuadernillo a4", CantStock = 10, PrecioVenta = 200, CantHojas = 70, TipoHoja = (EnumTipoHoja)2 });
+            misArticulos.Add(new Cuaderno() { Código = "eee5", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 20, PrecioVenta = 300, CantHojas = 80, TipoHoja = (EnumTipoHoja)1 });
+            lógica.Articulos = misArticulos;
+            //ACT
+            
+           var listado = lógica.actualizaciónStockDisponible("aaa1", 10);
+         
+
+            //ASSERT
+            Assert.That(listado[0].CantStock, Is.EqualTo(15));
+         }
     }
 }
