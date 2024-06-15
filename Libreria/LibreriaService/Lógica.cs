@@ -87,10 +87,12 @@ namespace LibreriaService
         return Articulos;
     }
 
-      /*  public List<Articulo> consultaArticulosStockMenorA5()
-        {
+      public List<Articulo> consultaArticulosStockMenorA5()
+        { 
+           var articulosStockMenor5 = (List<Articulo>)Articulos.Where(x => x.CantStock < 5); //VER QUE PUEDO HACER ACÁ. SI NO SALE METEMOS UN IF DENTRO DE FOREACH
 
-        } */
+            return articulosStockMenor5;
+        } 
 
         public (List<Articulo>, List<Articulo>, List<Articulo>s) devolverArticulosFiltradosPorTipo()
         {   List<Articulo> cuadernosFiltrados = new List<Articulo>();
@@ -98,11 +100,11 @@ namespace LibreriaService
             List<Articulo> lapicerasFiltradas = new List<Articulo>();
 
             foreach (Articulo articulo in Articulos) {
-            if (GetType() == typeof(Cuaderno))
+            if (articulo.GetType() == typeof(Cuaderno))
                 {
                     cuadernosFiltrados.Add(articulo);
                 }
-            else if (GetType() == typeof(Regla))
+            else if (articulo.GetType() == typeof(Regla))
                 {
                     reglasFiltradas.Add(articulo);
                 } else

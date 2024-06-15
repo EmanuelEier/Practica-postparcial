@@ -86,7 +86,8 @@ namespace LibreriaTest
             Assert.That(listado[0].CantStock, Is.EqualTo(15));
          }
 
-        public void filtrarPorTipoArticulo()
+        [Test]
+        public void filtrarPorTipoArticulo_Ok()
         {
             //ARRENGE
             List<Articulo> misArticulos = new List<Articulo>();
@@ -95,10 +96,44 @@ namespace LibreriaTest
             misArticulos.Add(new Regla() { Código = "ccc3", Marca = "Pamco", Nombre = "Regla", CantStock = 2, PrecioVenta = 500, TamañoCm = 30 });
             misArticulos.Add(new Cuaderno() { Código = "ddd4", Marca = "1810", Nombre = "Cuadernillo a4", CantStock = 10, PrecioVenta = 200, CantHojas = 70, TipoHoja = (EnumTipoHoja)2 });
             misArticulos.Add(new Cuaderno() { Código = "eee5", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 20, PrecioVenta = 300, CantHojas = 80, TipoHoja = (EnumTipoHoja)1 });
+            misArticulos.Add(new Regla() { Código = "fff6", Marca = "Sain", Nombre = "Regla", CantStock = 14, PrecioVenta = 500, TamañoCm = 20 });
+            misArticulos.Add(new Cuaderno() { Código = "ggg7", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 10, PrecioVenta = 300, CantHojas = 60, TipoHoja = (EnumTipoHoja)1 });
+            misArticulos.Add(new Cuaderno() { Código = "hhh8", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 15, PrecioVenta = 300, CantHojas = 80, TipoHoja = (EnumTipoHoja)2 });
+
             lógica.Articulos = misArticulos;
 
             //ACT
-            lógica.devolverArticulosFiltradosPorTipo();
+            var (listaCuadernos, listaReglas, listaLapiceras) = lógica.devolverArticulosFiltradosPorTipo();
+            
+            //ASSERT
+            Assert.That(listaCuadernos.Any(x => x.GetType() == typeof(Regla)), Is.EqualTo(false));
+            Assert.That(listaCuadernos.Any(x => x.GetType() == typeof(Lapicera)), Is.EqualTo(false));
+            Assert.That(listaReglas.Any(x => x.GetType() == typeof(Cuaderno)), Is.EqualTo(false));
+            Assert.That(listaReglas.Any(x => x.GetType() == typeof(Lapicera)), Is.EqualTo(false));
+            Assert.That(listaLapiceras.Any(x => x.GetType() == typeof(Regla)), Is.EqualTo(false));
+            Assert.That(listaLapiceras.Any(x => x.GetType() == typeof(Cuaderno)), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void filtrarPorStockMenorA5()
+        {
+            //ARRENGE
+            List<Articulo> misArticulos = new List<Articulo>();
+            misArticulos.Add(new Lapicera() { Código = "aaa1", Marca = "Bic", Nombre = "Lapicera", CantStock = 5, PrecioVenta = 300, Colores = (EnumColor)2, TipoTrazo = (EnumTrazo)2 });
+            misArticulos.Add(new Lapicera() { Código = "bbb2", Marca = "Bic", Nombre = "Lapicera", CantStock = 3, PrecioVenta = 700, Colores = (EnumColor)2, TipoTrazo = (EnumTrazo)2 });
+            misArticulos.Add(new Regla() { Código = "ccc3", Marca = "Pamco", Nombre = "Regla", CantStock = 2, PrecioVenta = 500, TamañoCm = 30 });
+            misArticulos.Add(new Cuaderno() { Código = "ddd4", Marca = "1810", Nombre = "Cuadernillo a4", CantStock = 10, PrecioVenta = 200, CantHojas = 70, TipoHoja = (EnumTipoHoja)2 });
+            misArticulos.Add(new Cuaderno() { Código = "eee5", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 20, PrecioVenta = 300, CantHojas = 80, TipoHoja = (EnumTipoHoja)1 });
+            misArticulos.Add(new Regla() { Código = "fff6", Marca = "Sain", Nombre = "Regla", CantStock = 14, PrecioVenta = 500, TamañoCm = 20 });
+            misArticulos.Add(new Cuaderno() { Código = "ggg7", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 10, PrecioVenta = 300, CantHojas = 60, TipoHoja = (EnumTipoHoja)1 });
+            misArticulos.Add(new Cuaderno() { Código = "hhh8", Marca = "Rivadavia", Nombre = "Cuaderno", CantStock = 4, PrecioVenta = 300, CantHojas = 80, TipoHoja = (EnumTipoHoja)2 });
+            lógica.Articulos = misArticulos;
+
+            //ACT
+            var articulosStockMenor5 = lógica.consultaArticulosStockMenorA5();
+
+            //ASSERT
+            Assert.That(articulosStockMenor5.Count, Is.EqualTo(4));
         }
     }
 }
