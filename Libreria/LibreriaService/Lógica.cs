@@ -18,10 +18,13 @@ namespace LibreriaService
 
         public List<Venta> agregarVenta(int DNI, int descuento, List<ArticuloVendido> articulosVendidos)
         {
-            var listaCorroborando = articulosVendidos.Select(x => x.CódigoProducto).ToList();
-            foreach (Articulo art in listaCorroborando)
+            int stockDisponible = 0;
+            foreach (ArticuloVendido art in articulosVendidos)
             {
-                if (art.Código == ) { }
+                var articuloConsulta = Articulos.Find(x => x.Código == art.Código);
+                if (art.Cantidad >= articuloConsulta.CantStock) { 
+                    art.Cantidad = articuloConsulta.CantStock;
+                }                                  
             }
 
             Venta venta = new Venta()
@@ -29,7 +32,7 @@ namespace LibreriaService
                 DNICliente = DNI,
                 Descuento = descuento,
                 ArticulosVendidos = articulosVendidos,
-                ImporteTotal = calcularImporteTotal(Articulos),
+                ImporteTotal = calcularImporteTotal(articulosVendidos, descuento),
                 Fecha = DateTime.Now,
             };
 
@@ -37,15 +40,21 @@ namespace LibreriaService
             return Ventas;
         }
 
-        public double calcularImporteTotal(List<Articulo> articulosVendidos)
+        public double calcularImporteTotal(List<ArticuloVendido> articulosVendidos, int descuento)
         {
-            int acum = 0;
+            double importeTotal = 0;
             foreach (var producto in articulosVendidos)
             {
-                acum += producto.PrecioVenta;
+                int indice = Articulos.FindIndex(x => x.Código == producto.Código);
+                importeTotal += (Articulos[indice].PrecioVenta) * (producto.Cantidad);
             }
 
-            return acum;
+            if (descuento != 0) {
+               double desc = descuento * (0.01);
+                importeTotal = importeTotal * (1 - desc);
+            }
+
+            return importeTotal;
         }
 
         public string obtenerDetalles(string códigoArticulo)
@@ -77,6 +86,33 @@ namespace LibreriaService
 
         return Articulos;
     }
+
+      /*  public List<Articulo> consultaArticulosStockMenorA5()
+        {
+
+        } */
+
+        public (List<Articulo>, List<Articulo>, List<Articulo>s) devolverArticulosFiltradosPorTipo()
+        {   List<Articulo> cuadernosFiltrados = new List<Articulo>();
+            List<Articulo> reglasFiltradas = new List<Articulo>();
+            List<Articulo> lapicerasFiltradas = new List<Articulo>();
+
+            foreach (Articulo articulo in Articulos) {
+            if (GetType() == typeof(Cuaderno))
+                {
+                    cuadernosFiltrados.Add(articulo);
+                }
+            else if (GetType() == typeof(Regla))
+                {
+                    reglasFiltradas.Add(articulo);
+                } else
+                {
+                    lapicerasFiltradas.Add(articulo);
+                }
+            }
+
+            return (cuadernosFiltrados, reglasFiltradas, lapicerasFiltradas);
+        }
 
         
         

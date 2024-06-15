@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LibreriaService
 {
-    public class ArticuloVendido 
+    public class ArticuloVendido
     {
-        public string CódigoProducto { get; set; }
-        public int Cantidad { get; set; }
+        public int Cantidad {  get; set; }  
+        public string Código { get; set; }
     }
 }
